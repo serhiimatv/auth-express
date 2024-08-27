@@ -7,6 +7,6 @@ const TokenSchema = new Schema({
 
 export default model("Token", TokenSchema);
 
-// export default model("User", TokenSchema);
+// export default models["Token"] ?? model("Token", TokenSchema);
 
 // mongoose.models["Task"] ?? mongoose.model("Task", Task);

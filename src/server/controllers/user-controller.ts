@@ -32,6 +32,10 @@ class UserController {
   }
   async activate(req: Request, res: Response, next: NextFunction) {
     try {
+      const activationLink = req.params.link;
+
+      await UserService.activate(activationLink);
+      return res.redirect(import.meta.env.VITE_CLIENT_URL);
     } catch (error) {
       console.log(error);
     }

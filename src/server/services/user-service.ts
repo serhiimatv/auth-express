@@ -4,12 +4,13 @@ import { v4 } from "uuid";
 import MailService from "./mail-service";
 import TokenService from "./token-service";
 import UserDto, { IUserDtoModel } from "../dtos/user-dto";
+import ApiError from "../exceptions/api-error";
 
 class UserService {
   async registration(email: string, password: String) {
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
-      throw new Error(`A user with such email ${email} exists`);
+      throw ApiError.BadRequest(`A user with such email ${email} exists`);
     }
 
     const hashPassword = await bcrypt.hash(password as string | Buffer, 3);
@@ -39,7 +40,7 @@ class UserService {
     const user = await UserModel.findOne({ activationLink });
 
     if (!user) {
-      throw new Error("Incorrect activation link");
+      throw ApiError.BadRequest("Incorrect activation link");
     }
 
     user.isActivated = true;

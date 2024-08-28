@@ -1,9 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import UserService from "../services/user-service";
+import { validationResult } from "express-validator";
+import ApiError from "../exceptions/api-error";
 
 class UserController {
   async registration(req: Request, res: Response, next: NextFunction) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest("Validation error", errors.array()));
+      }
+
       const { email, password } = req.body;
 
       const userData = await UserService.registration(email, password);
@@ -15,19 +22,19 @@ class UserController {
 
       return res.json(userData);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
   async login(req: Request, res: Response, next: NextFunction) {
     try {
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
   async logout(req: Request, res: Response, next: NextFunction) {
     try {
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
   async activate(req: Request, res: Response, next: NextFunction) {
@@ -37,20 +44,20 @@ class UserController {
       await UserService.activate(activationLink);
       return res.redirect(import.meta.env.VITE_CLIENT_URL);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
   async refresh(req: Request, res: Response, next: NextFunction) {
     try {
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
   async getUser(req: Request, res: Response, next: NextFunction) {
     try {
       res.json([123, "asdas"]);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 }

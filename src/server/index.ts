@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import authRouter from "./routers/auth-router";
+import ErrorMiddleware from "./middlewares/error-middleware";
 
 export const app = express();
 
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use("/api", authRouter);
+app.use(ErrorMiddleware);
 
 const start = async () => {
   try {

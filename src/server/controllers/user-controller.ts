@@ -80,9 +80,11 @@ class UserController {
       next(error);
     }
   }
-  async getUser(req: Request, res: Response, next: NextFunction) {
+  async getUser(_: Request, res: Response, next: NextFunction) {
     try {
-      res.json([123, "asdas"]);
+      const users = await UserService.getAllUsers();
+
+      return res.json(users);
     } catch (error) {
       next(error);
     }

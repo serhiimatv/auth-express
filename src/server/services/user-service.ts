@@ -5,6 +5,7 @@ import MailService from "./mail-service";
 import TokenService from "./token-service";
 import UserDto, { IUserDtoModel } from "../dtos/user-dto";
 import ApiError from "../exceptions/api-error";
+// import { UserIDJwtPayload, type JwtPayload } from "jsonwebtoken";
 
 class UserService {
   async registration(email: string, password: String) {
@@ -45,6 +46,59 @@ class UserService {
 
     user.isActivated = true;
     user.save();
+  }
+
+  async login(email: string, password: string) {
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      throw ApiError.BadRequest("User not found");
+    }
+    const isPasswordEquals = await bcrypt.compare(
+      password,
+      user.password as string
+    );
+    if (!isPasswordEquals) {
+      throw ApiError.BadRequest("Wrong password");
+    }
+
+    const userDto = new UserDto(user as unknown as IUserDtoModel);
+
+    const tokens = TokenService.generateTokens({ ...userDto });
+
+    await TokenService.saveToken(userDto.id as string, tokens.refreshToken);
+
+    return { ...tokens, user: userDto };
+  }
+
+  async logout(refreshToken: string) {
+    const token = await TokenService.removeToken(refreshToken);
+
+    return token;
+  }
+
+  async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw ApiError.UnauthorizedError();
+    }
+
+    const userData = TokenService.validateRefreshToken(refreshToken);
+
+    const tokenFromDB = TokenService.findToken(refreshToken);
+
+    if (!userData || !tokenFromDB) {
+      throw ApiError.UnauthorizedError();
+    }
+
+    const user = await UserModel.findById(userData.id);
+
+    const userDto = new UserDto(user as unknown as IUserDtoModel);
+
+    const tokens = TokenService.generateTokens({ ...userDto });
+
+    await TokenService.saveToken(userDto.id as string, tokens.refreshToken);
+
+    return { ...tokens, user: userDto };
   }
 }
 

@@ -1,6 +1,11 @@
-import jwt from "jsonwebtoken";
+import jwt, { UserIDJwtPayload } from "jsonwebtoken";
 import TokenModel from "../models/token-model";
 
+declare module "jsonwebtoken" {
+  export interface UserIDJwtPayload extends jwt.JwtPayload {
+    id: string;
+  }
+}
 class TokenService {
   generateTokens(payload: object) {
     const accessToken = jwt.sign(
@@ -17,6 +22,32 @@ class TokenService {
     return { accessToken, refreshToken };
   }
 
+  validateAccessToken(token: string) {
+    try {
+      const userData = jwt.verify(
+        token,
+        import.meta.env.VITE_JWT_ACCESS_SECRET
+      );
+
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  validateRefreshToken(token: string) {
+    try {
+      const userData = jwt.verify(
+        token,
+        import.meta.env.VITE_JWT_REFRESH_SECRET
+      ) as UserIDJwtPayload;
+
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async saveToken(userId: string, refreshToken: string) {
     const tokenData = await TokenModel.findOne({ user: userId });
     if (tokenData) {
@@ -25,6 +56,18 @@ class TokenService {
     }
     const token = await TokenModel.create({ user: userId, refreshToken });
     return token;
+  }
+
+  async removeToken(refreshToken: string) {
+    const tokenData = await TokenModel.deleteOne({ refreshToken });
+
+    return tokenData;
+  }
+
+  async findToken(refreshToken: string) {
+    const tokenData = await TokenModel.findOne({ refreshToken });
+
+    return tokenData;
   }
 }
 

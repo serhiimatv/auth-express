@@ -12,6 +12,8 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@fontsource/plus-jakarta-sans": "^5.1.0",
+    "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.0.0",
     "@preact/signals-react": "^2.2.0",
     "bcrypt": "^5.1.1",
@@ -25,6 +27,7 @@
     "nodemailer": "^6.9.14",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.26.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

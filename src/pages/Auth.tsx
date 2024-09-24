@@ -6,6 +6,7 @@ import {
   FormControl,
   TextField,
   Link,
+  type Theme,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -22,6 +23,7 @@ const Auth = () => {
       }}
     >
       <Paper
+        elevation={3}
         sx={{
           position: "relative",
           display: "flex",
@@ -43,10 +45,10 @@ const Auth = () => {
         >
           <Typography
             component="span"
-            sx={{
-              color: "#635fc7",
+            sx={(theme: Theme) => ({
+              color: theme.vars.palette.textLinkColor,
               fontFamily: "Plus Jakarta Sans, sans-serif",
-            }}
+            })}
           >
             Sign Up
           </Typography>

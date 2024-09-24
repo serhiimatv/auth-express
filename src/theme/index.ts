@@ -4,22 +4,50 @@ declare module "@mui/material/Button" {
     "primary-l": true;
   }
 }
+declare module "@mui/material/styles" {
+  interface PaletteOptions {
+    main: string;
+    mainSideElements: string;
+    textLinkColor: string;
+  }
+  interface Palette {
+    main: string;
+    mainSideElements: string;
+    textLinkColor: string;
+  }
+}
 //винести компоненти по файлам
 const theme = createTheme({
+  cssVariables: true,
+  colorSchemes: {
+    light: {
+      palette: {
+        main: "#F4F7FD",
+        mainSideElements: "#FFFFFF",
+        textLinkColor: "#635fc7",
+      },
+    },
+    dark: {
+      palette: {
+        main: "#20212C",
+        mainSideElements: "#2B2C37",
+        textLinkColor: "#FFFFFF",
+      },
+    },
+  },
   components: {
     MuiCssBaseline: {
-      styleOverrides: {
+      styleOverrides: (theme) => ({
         "*": {
           margin: 0,
           padding: 0,
           boxSizing: "border-box",
           fontFamily: "Plus Jakarta Sans, sans-serif",
-          color: "#000000",
         },
         body: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: theme.vars.palette.main,
         },
-      },
+      }),
     },
     MuiTypography: {
       styleOverrides: {
@@ -29,6 +57,13 @@ const theme = createTheme({
           lineHeight: "30px",
           fontFamily: "Plus Jakarta Sans, sans-serif",
         },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.vars.palette.mainSideElements,
+        }),
       },
     },
     MuiOutlinedInput: {
@@ -42,6 +77,12 @@ const theme = createTheme({
           height: "40px",
           maxWidth: "350px",
           width: "100%",
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            border: "solid 1px rgba(130, 143, 163, 0.25)",
+          },
+          ":hover .MuiOutlinedInput-notchedOutline": {
+            border: "solid 1px rgba(130, 143, 163, 0.25)",
+          },
         },
       },
     },
@@ -49,6 +90,9 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontFamily: "Plus Jakarta Sans, sans-serif",
+          "::placeholder": {
+            fontFamily: "Plus Jakarta Sans, sans-serif",
+          },
         },
       },
     },
@@ -65,6 +109,7 @@ const theme = createTheme({
                 borderRadius: "24px",
                 backgroundColor: "#635fc7",
                 color: "#FFFFFF",
+                fontFamily: "Plus Jakarta Sans, sans-serif",
                 ":hover": {
                   backgroundColor: "#a8a4ff",
                 },

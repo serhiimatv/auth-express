@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import Auth from "../pages/Auth";
+import Authorization from "../pages/Authorization";
 
 const Router = createBrowserRouter([
   {
@@ -7,7 +7,7 @@ const Router = createBrowserRouter([
   },
   {
     path: "/authorization",
-    Component: Auth,
+    Component: Authorization,
   },
 ]);
 

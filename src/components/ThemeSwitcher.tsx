@@ -4,7 +4,6 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 const ThemeSwitcher = () => {
   const { mode, setMode } = useColorScheme();
-  // console.log(mode);
 
   return (
     <SpeedDial

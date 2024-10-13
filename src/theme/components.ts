@@ -2,22 +2,18 @@ import { Components, Theme } from "@mui/material";
 
 export const components: Components = {
   MuiCssBaseline: {
-    styleOverrides: (theme: Theme) => {
-      console.log(theme);
-
-      return {
-        "*": {
-          margin: 0,
-          padding: 0,
-          boxSizing: "border-box",
-          fontFamily: "Plus Jakarta Sans, sans-serif",
-          color: theme.textColor,
-        },
-        body: {
-          backgroundColor: theme.main,
-        },
-      };
-    },
+    styleOverrides: (theme: Theme) => ({
+      "*": {
+        margin: 0,
+        padding: 0,
+        boxSizing: "border-box",
+        fontFamily: "Plus Jakarta Sans, sans-serif",
+        color: theme.textColor,
+      },
+      body: {
+        backgroundColor: theme.main,
+      },
+    }),
   },
   MuiTypography: {
     styleOverrides: {

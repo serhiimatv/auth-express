@@ -15,7 +15,6 @@ declare module "@mui/material/styles" {
   }
 }
 
-//винести компоненти по файлам
 const theme = createTheme({
   cssVariables: true,
   colorSchemes: {

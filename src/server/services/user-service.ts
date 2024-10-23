@@ -8,7 +8,7 @@ import ApiError from "../exceptions/api-error";
 // import { UserIDJwtPayload, type JwtPayload } from "jsonwebtoken";
 
 class UserService {
-  async registration(email: string, password: String) {
+  async registration(name: string, email: string, password: string) {
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest(`A user with such email ${email} exists`);
@@ -19,6 +19,7 @@ class UserService {
     const activationLink = v4();
 
     const user = await UserModel.create({
+      name,
       email,
       password: hashPassword,
       activationLink,
@@ -32,7 +33,7 @@ class UserService {
     const userDto = new UserDto(user as unknown as IUserDtoModel);
     const tokens = TokenService.generateTokens({ ...userDto });
 
-    await TokenService.saveToken(userDto.id as string, tokens.refreshToken);
+    await TokenService.saveToken(userDto.id, tokens.refreshToken);
 
     return { ...tokens, user: userDto };
   }
@@ -66,7 +67,7 @@ class UserService {
 
     const tokens = TokenService.generateTokens({ ...userDto });
 
-    await TokenService.saveToken(userDto.id as string, tokens.refreshToken);
+    await TokenService.saveToken(userDto.id, tokens.refreshToken);
 
     return { ...tokens, user: userDto };
   }
@@ -84,7 +85,7 @@ class UserService {
 
     const userData = TokenService.validateRefreshToken(refreshToken);
 
-    const tokenFromDB = TokenService.findToken(refreshToken);
+    const tokenFromDB = await TokenService.findToken(refreshToken);
 
     if (!userData || !tokenFromDB) {
       throw ApiError.UnauthorizedError();
@@ -96,7 +97,7 @@ class UserService {
 
     const tokens = TokenService.generateTokens({ ...userDto });
 
-    await TokenService.saveToken(userDto.id as string, tokens.refreshToken);
+    await TokenService.saveToken(userDto.id, tokens.refreshToken);
 
     return { ...tokens, user: userDto };
   }

@@ -7,6 +7,7 @@ const authRouter = express.Router();
 
 authRouter.post(
   "/registration",
+  body("name").isString(),
   body("email").isEmail(),
   body("password").isLength({ min: 3, max: 32 }),
   userController.registration
